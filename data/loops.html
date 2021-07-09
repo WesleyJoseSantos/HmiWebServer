@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="text.css">
+    <link rel="stylesheet" href="tab.css">
+    <link rel="stylesheet" href="button.css">
+    <link rel="stylesheet" href="status.css">
+    <link rel="stylesheet" href="w3.css">
+    <title>Gerdau | Laminação 2</title>
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="title">
+        <span>GERDAU</span>
+        <h3>Loop Scanners</h3>
+        <div class="divider"></div>
+      </header>
+
+      <div class="content">
+        <ul>
+          <li class='display'>
+            M3:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="M3_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            M4:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="M4_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            M5:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="M5_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            M6:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="M6_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            A1:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="A1_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            A2:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="A2_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            A2A:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="A2A_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            A2B:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="A2B_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            A3:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="A3_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+          <li class='display'>
+            A4:
+            <div class="w3-container w3-green" style="width:0%; display: inline-block;" id="A4_VALOR_ATUAL_DO_LACO">
+              #VALUE
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <button class="btn" onclick="showScreen('home.htm')">
+        Voltar
+      </button>
+
+    </div>
+  <script src="nav.js"></script>
+  <script src="tab.js"></script>
+  <script src="hmi.js"></script>
+  <script>
+      communicationStart(250);
+  </script>
+  </body>
+</html>

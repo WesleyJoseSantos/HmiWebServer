@@ -15,6 +15,8 @@
 #include "ArduinoJson.h"
 #include "WifiSettings.hpp"
 
+#define BUF_SIZ 150
+
 class HmiWebServer : public WebServer
 {
 private:
@@ -90,18 +92,47 @@ public:
         wifiBegin();
     }
 
+    void serialReadFile(String fileName, long lenght){
+        File file = LittleFS.open(fileName.c_str(), "w");
+        uint8_t bytes[BUF_SIZ];
+        
+        long receivedLenght = 0;
+
+        Serial.printf("Started file %s\n", fileName.c_str());
+
+        while(receivedLenght <= lenght){
+            if(Serial.available()){
+                int siz = lenght - receivedLenght > BUF_SIZ ? BUF_SIZ : lenght - receivedLenght;
+                receivedLenght += Serial.readBytes(bytes, siz);
+
+                file.write(bytes, siz);
+
+                int progress = map(receivedLenght, 0, lenght, 0, 100);
+                Serial.printf("Reading file: %s (%d%%) [%ld/%ld]\n", fileName.c_str(), progress, receivedLenght, lenght);
+            }
+            if(receivedLenght == lenght){
+                file.close();
+                Serial.printf("File %s Saved!\n", fileName.c_str());
+                break;
+            }
+        }
+    }
+
     void task(){
         if(Serial.available()){
             String data = Serial.readStringUntil('\n');
             StaticJsonDocument<512> json;
             deserializeJson(json, data);
+            bool unrecognized = true;
 
             if(json.containsKey("Test")){
                 Serial.println("{\"Test\":true}");
+                unrecognized = false;
             }
 
             if(json.containsKey("StartWifi")){
                 wifiBegin();
+                unrecognized = false;
             }
 
             if(json.containsKey("Format")){
@@ -111,37 +142,30 @@ public:
                     Serial.println("SPIFFS Mount Failed");
                 }
                 Serial.println("Filesystem formated");
+                unrecognized = false;
             }
 
             if(json.containsKey("File")){
                 String fileName = json["File"];
-                String content = "";
-                String data;
                 long lenght = json["Length"];
-
-                while(true){
-                    int progress = map(content.length(), 0, lenght, 0, 100);
-                    Serial.printf("Reading file: %s (%d%%)\n", fileName.c_str(), progress);
-                    data = Serial.readStringUntil('\n');
-                    if(data == "END") break;
-                    if(content != "") content += '\n';
-                    content += data;
-                }
-
-                File file = LittleFS.open(fileName.c_str(), "w");
-                file.print(content);
-                file.close();
-
-                Serial.printf("Reading file: %s (100%%)\n", fileName.c_str());
+                serialReadFile(fileName, lenght);
+                unrecognized = false;
             }
 
             if(json.containsKey("Ssid")){
                 wifiFile.fromJson(data);
                 wifiFile.save();
+                unrecognized = false;
             }
 
             if(json.containsKey("Name")){
                 setTag(json);
+                unrecognized = false;
+            }
+
+            if(unrecognized){
+                Serial.println("Unrecognized data received:");
+                Serial.println(data);
             }
         }
     }
